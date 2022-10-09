@@ -22,7 +22,9 @@ Linijki=`wc -l < Pytania`
 result=$(( $Linijki / 8 ));
 losowe=`expr $Liczba % $result`
 cash=$(( $losowe * 8))
-cash=$(( $cash + 2))
+cash=$(( $cash + 1))
+QId=`awk 'NR=='$cash Pytania`
+cash=$(( $cash + 1))
 echo `awk 'NR=='$cash Pytania`
 
 ################################################
@@ -95,15 +97,69 @@ read xd
 cash=$(( $cash + 1))
 cso=`awk 'NR=='$cash Pytania`
 
-if [ "$xd" = "$cso" ]
-then
-	echo "Hurra, poprawna odpowiedz"
-	PlusPoints=$(( $PlusPoints+1 ))
+echo "$QId"
+
+if [ "$QId" = "0" ]
+then 
+	if [ "$xd" = "$cso" ]
+		then
+			echo "Hurra, poprawna odpowiedz"
+			PlusPoints=$(( $PlusPoints+1 ))
 	
 
-else
-	echo "Ahh... nie tym razem"
+	else
+		echo "Ahh... nie tym razem"
+	fi
 fi
+
+if [ "$QId" = "1" ]
+then 
+	if [ "$xd" = "$cso" ]
+		then
+			echo "Hurra, poprawna odpowiedz"
+			PlusPoints=$(( $PlusPoints+1 ))
+	
+
+	else
+		echo "Ahh... nie tym razem"
+	fi
+fi
+
+if [ "$QId" = "2" ]
+then 
+	text="$cso"
+
+# Set comma as delimiter
+	IFS=':'
+
+#Read the split words into an array based on comma delimiter
+	read -a strarr <<< "$text"
+
+#Print the splitted words
+	min="${strarr[0]}"
+	max="${strarr[1]}"
+
+	if [ $(($xd)) -ge $(($min)) ]
+		then
+			if [ $(($max)) -ge $(($xd)) ]
+				then 
+					echo "Hurra, poprawna odpowiedz"
+					PlusPoints=$(( $PlusPoints+1 ))
+				else
+					echo "Ahh... nie tym razem"
+			fi
+	
+
+		else
+			echo "Ahh... nie tym razem"
+	fi
+fi
+
+
+
+
+
+
 
 done
 
