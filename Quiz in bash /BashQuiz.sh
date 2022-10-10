@@ -1,36 +1,53 @@
 #!/bin/bash
 
+#Nazwa użytkownika, która zostanie zapisana w pliku porównawczym
 UserName=""
 echo "Podaj nazwe uzytkownika"
 read UserName;
 
+#Na ile pytań już odpowiedziano
 zmienna=1
+#Ile ma być pytan (max bo to do while)
 Max=0
+#ile punktów osiągnął gracz 
 PlusPoints=0
 
 echo "Ile ma byc pytan"
 read Max
 
+#Zamiana na int
 Max=$(( Max ))
 
+#Do while do pytan
 while [ $zmienna -le $Max ]
 do
-echo $zmienna
+
+#Dodaje ile pytan już bylo
 zmienna=$(($zmienna + 1))
+################################################
+# Mechanizm losowania pytania (Oczywiscie pseodoslosowego)
+################################################
+
+#Pobieranie milisekund 
 Liczba=`date +%s%N`
+#Zczytywanie ilości linijek z pliku pytania 
 Linijki=`wc -l < Pytania`
+#Obliczanie ilości pytan 
 result=$(( $Linijki / 8 ));
+#Wlasciwy moment "Losowania" za pomoca modulo
 losowe=`expr $Liczba % $result`
+#Wyszukiwanie "wskaźnika" pytania
 cash=$(( $losowe * 8))
 cash=$(( $cash + 1))
+#Przypisaine QId (QuestionID) wskaźnika pytania
 QId=`awk 'NR=='$cash Pytania`
+
 cash=$(( $cash + 1))
+#Wyświetla pytanie 
 echo `awk 'NR=='$cash Pytania`
 
 ################################################
-#
-# Pytanie 1
-#
+# Wyswietlanie - Pytanie 1
 ################################################
 
 cash=$(( $cash + 1))
@@ -43,9 +60,7 @@ then
 fi
 
 ################################################
-#
-# Pytanie 2
-#
+# Wyswietlanie - Pytanie 2
 ################################################
 
 cash=$(( $cash + 1))
@@ -58,9 +73,7 @@ then
 fi
 
 ################################################
-#
-# Pytanie 3
-#
+# Wyswietlanie - Pytanie 3
 ################################################
 cash=$(( $cash + 1))
 cash2=`awk 'NR=='$cash Pytania`
@@ -72,9 +85,7 @@ then
 fi
 
 ################################################
-#
-# Pytanie 4
-#
+# Wyswietlanie - Pytanie 4
 ################################################
 cash=$(( $cash + 1))
 cash2=`awk 'NR=='$cash Pytania`
@@ -86,9 +97,7 @@ then
 fi
 
 ################################################
-#
-# Sprawdzanie odpowiedzi
-#
+# Mechanizm sprawdzania odpowiedzi
 ################################################
 
 xd=""
@@ -169,4 +178,10 @@ echo "Gracz : $UserName odpowiedzial poprawnie na : $PlusPoints / $Max" >> Wynik
 
 varXD="scale=2; $PlusPoints / $Max * 100" | bc
 
-echo "Skutecznosc na poziomie : $varXD %" >> Wyniki
+var1=10
+var2=3
+kpj="scale=2; $PlusPoints/$Max" | bc
+echo "scale=2; $PlusPoints/$Max" | bc
+
+
+echo "Skutecznosc na poziomie : $kpj" >> Wyniki
